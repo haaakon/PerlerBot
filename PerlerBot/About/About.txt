@@ -1,0 +1,15 @@
+ 	
+	embedXcode
+	embedXcode+
+	----------------------------------
+	Embedded Computing on Xcode
+	
+	
+	© Rei VILO, 2010-2014
+	All rights reserved	
+	http://embedXcode.weebly.com/
+	
+	
+embedXcode  • Jan 20, 2014 release 126 • Improved support for Teensy 3.0
+embedXcode+ • Jan 20, 2014 release 126 • Improved support for Teensy 3.0
+	
