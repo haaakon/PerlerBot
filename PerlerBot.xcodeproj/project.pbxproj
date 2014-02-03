@@ -59,7 +59,7 @@
 		EC6251FB189FFFA8002BF291 /* Mpide.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = Mpide.mk; path = Makefiles/Mpide.mk; sourceTree = "<group>"; };
 		EC6251FC189FFFA8002BF291 /* Wiring.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = Wiring.mk; path = Makefiles/Wiring.mk; sourceTree = "<group>"; };
 		EC6251FD189FFFA8002BF291 /* Step1.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = Step1.mk; path = Makefiles/Step1.mk; sourceTree = "<group>"; };
-		EC6251FE189FFFA8002BF291 /* Step2.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = Step2.mk; path = Makefiles/Step2.mk; sourceTree = "<group>"; };
+		EC6251FE189FFFA8002BF291 /* Step2.mk */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = Step2.mk; path = Makefiles/Step2.mk; sourceTree = "<group>"; };
 		EC6251FF189FFFA8002BF291 /* Teensy.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = Teensy.mk; path = Makefiles/Teensy.mk; sourceTree = "<group>"; };
 		EC625200189FFFA8002BF291 /* Teensy2.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = Teensy2.mk; path = Makefiles/Teensy2.mk; sourceTree = "<group>"; };
 		EC625201189FFFA8002BF291 /* Teensy3.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = Teensy3.mk; path = Makefiles/Teensy3.mk; sourceTree = "<group>"; };
@@ -73,7 +73,7 @@
 		EC62520B189FFFA8002BF291 /* embedXcode_check */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = embedXcode_check; path = Utilities/embedXcode_check; sourceTree = "<group>"; };
 		EC62520C189FFFA8002BF291 /* embedXcode_chrono */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = embedXcode_chrono; path = Utilities/embedXcode_chrono; sourceTree = "<group>"; };
 		EC62520D189FFFA8002BF291 /* TemplateIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = TemplateIcon.icns; path = Utilities/TemplateIcon.icns; sourceTree = "<group>"; };
-		EC62520E189FFFA8002BF291 /* PerlerBot.ino */ = {isa = PBXFileReference; lastKnownFileType = text; path = PerlerBot.ino; sourceTree = "<group>"; };
+		EC62520E189FFFA8002BF291 /* PerlerBot.ino */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = PerlerBot.ino; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */

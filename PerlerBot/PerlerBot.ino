@@ -8,19 +8,20 @@
 // 				Håkon Bogen
 //
 // Date			03.02.14 17:47
-// Version		<#version#>
+// Version		0.1
 // 
 // Copyright	© Håkon Bogen, 2014
-// License		<#license#>
+// License		MIT
 //
 // See			ReadMe.txt for references
 //
+
 
 // Core library for code-sense
 #if defined(WIRING) // Wiring specific
 #include "Wiring.h"
 #elif defined(MAPLE_IDE) // Maple specific
-#include "WProgram.h"   
+#include "WProgram.h"
 #elif defined(MICRODUINO) // Microduino specific
 #include "Arduino.h"
 #elif defined(MPIDE) // chipKIT specific
@@ -40,6 +41,12 @@
 #endif
 
 // Include application, user and local libraries
+#include "LocalLibrary.h"
+
+#include <Stepper.h>
+#include <Servo.h>
+
+// Prototypes
 
 
 // Define variables and constants
@@ -49,43 +56,150 @@
 //
 uint8_t myLED;
 
+Servo myservo;
+int threshold = 830;
+
+
+// PINS
+Stepper conveyorStepper(200, 0,1,2,3);
+
+Stepper xValueStepper(200, 4,5,6,7);
+
+Stepper yValueStepper(200,8,9,10,11);
+
+int redledpin = 13;
+
+// microswitches
+int outOfBoundsXNorthPin = 14;
+int outOfBoundsXSouthPin = 15;
+
+int outOfBoundsYNorthPin = 16;
+int outOfBoundsYSouthPin = 17;
+
+int servopin = 18;
+
+// bead measurer
+int analogPin = A1;
+
+int stepperSpeed = 20;
+
+int pos = 0;    // variable to store the servo position
+
+int hasRegisteredBead = 0;
+
+// MACHINE STATE
+
+// stores the number of steps the printer has taken on x axis
+int printerPositionX = 0;
+// printer is moving forward
+int isGoingForward = 1;
+
+
 
 //
 // Brief	Setup
 // Details	Define the pin the LED is connected to
 //
-// Add setup code 
+// Add setup code
 void setup() {
-  // myLED pin number
-#if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega2560__) || defined(__AVR_ATmega32U4__) || defined(__SAM3X8E__) // Arduino specific 
-  myLED = 13; 
-#elif defined(__PIC32MX__) // chipKIT specific
-  myLED = 13;
-#elif defined(__AVR_ATtinyX5__) // Digispark specific
-    myLED = 1; // assuming model A
-#elif defined(__AVR_ATmega644P__) // Wiring specific
-  myLED = 15; 
-#elif defined(__MSP430G2452__) || defined(__MSP430G2553__) || defined(__MSP430G2231__) || defined(__MSP430F5529__)  || defined(__MSP430FR5739__) // LaunchPad MSP430 and Experimeter Board FR5739 specific
-    myLED = RED_LED;
-#elif defined(__LM4F120H5QR__) || defined(__TM4C1230C3PM__) // LaunchPad Stellaris and Tiva specific
-  myLED = RED_LED;
-#elif defined(MCU_STM32F103RB) || defined(MCU_STM32F103ZE) || defined(MCU_STM32F103CB) || defined(MCU_STM32F103RE) // Maple specific
-  myLED = BOARD_LED_PIN; 
-#elif defined(__MK20DX128__) // Teensy 3.0 specific
-    myLED = 13;
-#endif
-
-  pinMode(myLED, OUTPUT);     
+    
+    // sets the pin as output
+    
+    pinMode(redledpin, OUTPUT);   // sets the pin as output
+    Serial.begin(9600);
+    myStepper.setSpeed(stepperSpeed);
+    conveyorStepper.setSpeed(stepperSpeed);
+    myservo.attach(servopin);
 }
 
-//
-// Brief	Loop
-// Details	Blink the LED
-//
-// Add loop code 
+void sweepServo()
+{
+    for(pos = 180; pos>=1; pos-=1)     // goes from 180 degrees to 0 degrees
+    {
+        myservo.write(pos);              // tell servo to go to position in variable 'pos'
+                                         // waits 15ms for the servo to reach the position
+    }
+    for(pos = 0; pos < 180; pos += 1)  // goes from 0 degrees to 180 degrees
+    {                                  // in steps of 1 degree
+        myservo.write(pos);
+        delay(15);    // tell servo to go to position in variable 'pos'                        // waits 15ms for the servo to reach the position
+    }
+}
+
+
+bool isRobotIsOutOfBoundsInXAxis()
+{
+    if (digitalRead(outOfBoundsXSouthPin)){
+        return true;
+    }
+    if (digitalRead(outOfBoundsXNorthPin)){
+        return true;
+    }
+    
+    return false;
+}
+
+bool isRobotIsOutOfBoundsInYAxis() {
+    
+    if (digitalRead(outOfBoundsYNorthPin)){
+        return true;
+    }
+    if (digitalRead(outOfBoundsYSouthPin)){
+        return true;
+    }
+    return false;
+}
+
+void moveXaxis(int steps) {
+    if (isRobotIsOutOfBoundsInXAxis()) {
+        xValueStepper.step(steps);
+    }
+}
+
+void moveYaxis(int steps) {
+    if (isRobotIsOutOfBoundsInYAxis()) {
+        yValueStepper.step(steps);
+    }
+}
+void moveToNextBeadX (){
+    
+}
+void resetXAxis() {
+    
+}
+
+void resetYAxis() {
+    
+}
+
 void loop() {
-  digitalWrite(myLED, HIGH);
-  delay(500);    
-  digitalWrite(myLED, LOW);
-  delay(500);    
+    
+    while (!digitalRead(53)) {
+        Serial.println("Waiting for someone to hit me on pin 53...");
+        delay(1000);
+    }
+    
+    if (printerPositionX == 300) {
+        isGoingForward = 0;
+    } else if (printerPositionX == 0) {
+        isGoingForward = 1;
+    }
+    
+    conveyorStepper.step(-1);
+    
+    if (analogRead(analogPin) < threshold) {
+        hasRegisteredBead = 1;
+        digitalWrite(redledpin, HIGH);  // turn LED ON
+        conveyorStepper.step(-4);
+        conveyorStepper.step(-4);
+        Serial.println(analogRead(analogPin));
+    } else {
+        if (hasRegisteredBead == 1){
+            conveyorStepper.step(-5);
+            sweepServo();
+            sweepServo();
+            hasRegisteredBead = 0;
+        }
+        digitalWrite(redledpin, LOW);
+    }
 }
