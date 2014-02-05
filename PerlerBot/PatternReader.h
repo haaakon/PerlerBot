@@ -50,6 +50,26 @@ struct perlerBoard{
     int y[50];
 };
 
+
+enum BeadPuttingState{
+    BeadPuttingStateConveyorMoving,
+    BeadPuttingStateBeadEnteredInfrared,
+    BeadPuttingStateBeadExitedInfrared,
+    BeadPuttingStateBeatIsBeingPutToBoard,
+    BeadPuttingStateXAxisWillStartMoving,
+    BeadPuttingStateXAxisDidStartMoving,
+    BeadPuttingStateYAxisMoving,
+    BeadPuttingStateWaitingForRead
+};
+
+enum BeadReadingState{
+    BeadReadingStateWaitingForRead,
+    BeadReadingStateFoundEmptyBeadSpot,
+    BeadReadingStateFoundBead,
+    BeadReadingStateMoveToNextRow
+};
+
+
 class PatternReader {
     
 public:
@@ -60,7 +80,7 @@ public:
     String WhoAmI();
     void set(uint8_t data);
     uint8_t get();
-    
+    BeadPuttingState beadPuttingState;
     /**
      *  the current position the reader is at on the x axis
      */
@@ -76,7 +96,7 @@ public:
     /**
      *  Reads the next
      */
-    void read();
+    BeadReadingState read();
     
 private:
     uint8_t _data;

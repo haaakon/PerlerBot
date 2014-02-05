@@ -44,7 +44,9 @@ perlerBoard PatternReader::testPattern1DX() {
     return aBoard;
 }
 
-void PatternReader::read() {
+BeadReadingState PatternReader::read() {
+    
+}
 
 uint8_t PatternReader::get() {
     return _data; 

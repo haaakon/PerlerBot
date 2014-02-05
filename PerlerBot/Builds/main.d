@@ -11,4 +11,5 @@ Builds/main.o: main.cpp PerlerBot.ino \
   /Applications/Arduino.app/Contents/Resources/Java/hardware/arduino/variants/mega/pins_arduino.h \
   LocalLibrary.h \
   /Applications/Arduino.app/Contents/Resources/Java/libraries/Stepper/Stepper.h \
-  /Applications/Arduino.app/Contents/Resources/Java/libraries/Servo/Servo.h
+  /Applications/Arduino.app/Contents/Resources/Java/libraries/Servo/Servo.h \
+  PatternReader.h

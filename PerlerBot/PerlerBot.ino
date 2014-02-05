@@ -96,10 +96,13 @@ int printerPositionX = 0;
 // printer is moving forward
 int isGoingForward = 1;
 
-
+PatternReader patternReader;
 
 
 void setup() {
+    
+    patternReader.currentPositionX = 0;
+    patternReader.beadPuttingState = BeadPuttingStateWaitingForRead;
     
     // sets the pin as output
     
@@ -149,19 +152,19 @@ bool isRobotIsOutOfBoundsInYAxis() {
 }
 
 void moveXaxis(int steps) {
-    if (isRobotIsOutOfBoundsInXAxis()) {
+    if (isRobotIsOutOfBoundsInXAxis() == false) {
         xValueStepper.step(steps);
     }
 }
 
 void moveYaxis(int steps) {
-    if (isRobotIsOutOfBoundsInYAxis()) {
+    if (isRobotIsOutOfBoundsInYAxis() == false) {
         yValueStepper.step(steps);
     }
 }
 
 void moveToNextBeadX (){
-    
+    moveXaxis(10);
 }
 
 void resetXAxis() {
@@ -173,6 +176,29 @@ void resetYAxis() {
 }
 
 void loop() {
+    Serial.print("bead putting state on top of loop:");
+    Serial.println(patternReader.beadPuttingState);
+    if (patternReader.beadPuttingState == BeadPuttingStateWaitingForRead) {
+        BeadReadingState readState = patternReader.read();
+        switch (readState) {
+                // if read found bead, fire up the conveyour belt to get it down there
+            case BeadReadingStateFoundBead:{
+                patternReader.beadPuttingState = BeadPuttingStateConveyorMoving;
+                break;
+            }
+            case BeadReadingStateFoundEmptyBeadSpot: {
+                moveToNextBeadX();
+                break;
+            }
+            case BeadReadingStateWaitingForRead: {
+                break;
+            }
+                
+            default:
+                break;
+        }
+        
+    }
     
     while (!digitalRead(53)) {
         Serial.println("Waiting for someone to hit me on pin 53...");
@@ -185,21 +211,31 @@ void loop() {
         isGoingForward = 1;
     }
     
-    conveyorStepper.step(-1);
+    if (patternReader.beadPuttingState == BeadPuttingStateConveyorMoving){
+        conveyorStepper.step(-1);
+    }
     
     if (analogRead(analogPin) < threshold) {
-        hasRegisteredBead = 1;
+        patternReader.beadPuttingState = BeadPuttingStateBeadEnteredInfrared;
         digitalWrite(redledpin, HIGH);  // turn LED ON
-        conveyorStepper.step(-4);
-        conveyorStepper.step(-4);
+        conveyorStepper.step(-1);
         Serial.println(analogRead(analogPin));
+        hasRegisteredBead = 1;
     } else {
-        if (hasRegisteredBead == 1){
-            conveyorStepper.step(-5);
+        if (patternReader.beadPuttingState  == BeadPuttingStateBeadEnteredInfrared){
+            patternReader.beadPuttingState = BeadPuttingStateBeadExitedInfrared;
+            // Step twice to be sure to drop bead
+            conveyorStepper.step(-2);
+            // Sweep servo twice to be sure to drop bead
             sweepServo();
             sweepServo();
             hasRegisteredBead = 0;
         }
         digitalWrite(redledpin, LOW);
+    }
+    
+    if (patternReader.beadPuttingState == BeadPuttingStateBeadExitedInfrared){
+        moveToNextBeadX();
+        // do stuff?
     }
 }
