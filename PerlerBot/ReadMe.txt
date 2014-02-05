@@ -5,7 +5,7 @@
   Developed with embedXcode
 
   Project PerlerBot
-  Created by Håkon Bogen on 03.02.14
+  Created by Håkon Bogen on 05.02.14
   Copyright © 2014 Håkon Bogen
   License <#license#>
 

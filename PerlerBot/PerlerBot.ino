@@ -1,15 +1,15 @@
-// 
-// PerlerBot 
+//
+// PerlerBot
 //
 // Making a bot that can print using perler beads
 // Developed with [embedXcode](http://embedXcode.weebly.com)
-// 
+//
 // Author	 	Håkon Bogen
 // 				Håkon Bogen
 //
 // Date			03.02.14 17:47
 // Version		0.1
-// 
+//
 // Copyright	© Håkon Bogen, 2014
 // License		MIT
 //
@@ -45,6 +45,8 @@
 
 #include <Stepper.h>
 #include <Servo.h>
+#include "PatternReader.h"
+
 
 // Prototypes
 
@@ -96,18 +98,14 @@ int isGoingForward = 1;
 
 
 
-//
-// Brief	Setup
-// Details	Define the pin the LED is connected to
-//
-// Add setup code
+
 void setup() {
     
     // sets the pin as output
     
     pinMode(redledpin, OUTPUT);   // sets the pin as output
     Serial.begin(9600);
-    myStepper.setSpeed(stepperSpeed);
+    xValueStepper.setSpeed(stepperSpeed);
     conveyorStepper.setSpeed(stepperSpeed);
     myservo.attach(servopin);
 }
@@ -161,9 +159,11 @@ void moveYaxis(int steps) {
         yValueStepper.step(steps);
     }
 }
+
 void moveToNextBeadX (){
     
 }
+
 void resetXAxis() {
     
 }

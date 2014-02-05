@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EC6251C5189FFFA8002BF291"
+               BlueprintIdentifier = "EC504CE518A2BE2900ACD90B"
                BuildableName = "Upload"
                BlueprintName = "Upload"
                ReferencedContainer = "container:PerlerBot.xcodeproj">

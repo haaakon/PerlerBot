@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EC6251C4189FFFA8002BF291"
+               BlueprintIdentifier = "EC504CE418A2BE2900ACD90B"
                BuildableName = "Serial"
                BlueprintName = "Serial"
                ReferencedContainer = "container:PerlerBot.xcodeproj">

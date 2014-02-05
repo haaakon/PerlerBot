@@ -7,7 +7,7 @@
 //
 // Project 		PerlerBot
 //
-// Created by 	Håkon Bogen, 03.02.14 17:47
+// Created by 	Håkon Bogen, 05.02.14 19:44
 //              Håkon Bogen
 //
 // Copyright 	© Håkon Bogen, 2014
